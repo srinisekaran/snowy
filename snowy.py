@@ -36,7 +36,7 @@ bot = telebot.TeleBot(config.TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, welcome_message)
+    bot.reply_to(message, welcome_message())
 
 @bot.message_handler(commands=['news'])
 def send_news(message):
