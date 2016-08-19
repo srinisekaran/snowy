@@ -1,8 +1,15 @@
+# Snowy
+# Srinivaas Sekaran
+
 import telebot
 import config 
 import requests
 import json
 
+from timer import time_track
+from bs4 import BeautifulSoup
+
+@time_track
 def welcome_message(): 
 	welcome_string = (
 		"Hi, I'm Snowy! Tell me something to do:\n"
@@ -11,6 +18,7 @@ def welcome_message():
 		)
 	return welcome_string
 
+@time_track
 def retrieve_news():
 	try: 
 		response = requests.get(config.news['SOURCE'] + config.news['KEY'])
@@ -18,6 +26,7 @@ def retrieve_news():
 		print('Failed to Connect to News API')
 	return response
 
+@time_track
 def parse_news(news_to_parse):
 	news_data = news_to_parse.json()
 	news_headline = (
@@ -27,7 +36,6 @@ def parse_news(news_to_parse):
 		+ news_data['articles'][0]['url']
 		)	
 	return news_headline
-
 
 def retrieve_movies():
 	pass
