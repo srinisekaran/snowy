@@ -57,7 +57,7 @@ def retrieve_movies(source):
 def parse_movies(data_to_parse, selector, h_class, sub_selector):
 	movies_data = data_to_parse.text
 	soup = BeautifulSoup(movies_data, 'lxml')
-	
+
 	try: 
 		movies = soup.find(selector, 
 			{ 'class' : h_class })
@@ -71,9 +71,6 @@ def parse_movies(data_to_parse, selector, h_class, sub_selector):
 
 # Bot Config, Initialization, and Handlers
 
-news_ret_val = retrieve_news(config.news['SOURCE'], config.news['KEY'])
-movie_ret_val = retrieve_movies(config.movies['SOURCE'])
-
 bot = telebot.TeleBot(config.TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
@@ -82,10 +79,12 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['news'])
 def send_news(message):
-    bot.reply_to(message, parse_news(news_ret_val))
+	news_ret_val = retrieve_news(config.news['SOURCE'], config.news['KEY'])
+	bot.reply_to(message, parse_news(news_ret_val))
 
 @bot.message_handler(commands=['movies'])
 def send_movies(message):
+    movie_ret_val = retrieve_movies(config.movies['SOURCE'])
     bot.reply_to(message, parse_movies(
     	movie_ret_val, config.movies['SELECTOR'], 
     	config.movies['CLASS'], 
