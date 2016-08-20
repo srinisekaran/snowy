@@ -1,4 +1,5 @@
 # Snowy
+# Helpful Telegram bot
 # Srinivaas Sekaran
 
 import telebot
@@ -9,6 +10,7 @@ import json
 from timer import time_track
 from bs4 import BeautifulSoup
 
+
 @time_track
 def welcome_message(): 
 	welcome_string = (
@@ -18,13 +20,16 @@ def welcome_message():
 		)
 	return welcome_string
 
+
+# News Retrieval from JSON API and Parsing
+
 @time_track
-def retrieve_news():
+def retrieve_news(source, key):
 	try: 
-		response = requests.get(config.news['SOURCE'] + config.news['KEY'])
+		news_response = requests.get(source + key)
 	except requests.ConnectionError:
 		print('Failed to Connect to News API')
-	return response
+	return news_response
 
 @time_track
 def parse_news(news_to_parse):
@@ -37,8 +42,37 @@ def parse_news(news_to_parse):
 		)	
 	return news_headline
 
-def retrieve_movies():
-	pass
+
+# Movie Retrieval and Parsing 
+
+@time_track
+def retrieve_movies(source):
+	try: 
+		movie_response = requests.get(source)
+	except requests.ConnectionError:
+		print('Failed to Connect to Movie Wiki')
+	return movie_response
+
+@time_track
+def parse_movies(data_to_parse, selector, h_class, sub_selector):
+	movies_data = data_to_parse.text
+	soup = BeautifulSoup(movies_data, 'lxml')
+	
+	try: 
+		movies = soup.find(selector, 
+			{ 'class' : h_class })
+		children = [ movie.text for movie in movies.find_all(sub_selector) ]
+	except: 
+		print('Could not parse page! Check selectors in config file.')
+
+	movie_ret = 'Movies Playing:\n' + ('\n').join(children) 
+	return movie_ret
+
+
+# Bot Config, Initialization, and Handlers
+
+news_ret_val = retrieve_news(config.news['SOURCE'], config.news['KEY'])
+movie_ret_val = retrieve_movies(config.movies['SOURCE'])
 
 bot = telebot.TeleBot(config.TOKEN)
 
@@ -48,6 +82,13 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['news'])
 def send_news(message):
-    bot.reply_to(message, parse_news(retrieve_news()))
+    bot.reply_to(message, parse_news(news_ret_val))
+
+@bot.message_handler(commands=['movies'])
+def send_movies(message):
+    bot.reply_to(message, parse_movies(
+    	movie_ret_val, config.movies['SELECTOR'], 
+    	config.movies['CLASS'], 
+    	config.movies['SUB_SELECTOR'] ))
 
 bot.polling()
