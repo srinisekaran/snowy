@@ -63,7 +63,7 @@ def parse_movies(data_to_parse, selector, h_class, sub_selector):
 			{ 'class' : h_class })
 		children = [ movie.text for movie in movies.find_all(sub_selector) ]
 	except: 
-		print('Could not parse page! Check selectors in config file.')
+		print('Could not read page! Check selectors in config file.')
 
 	movie_ret = 'Movies Playing:\n' + ('\n').join(children) 
 	return movie_ret
