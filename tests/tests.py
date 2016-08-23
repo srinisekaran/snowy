@@ -1,8 +1,8 @@
 import unittest
 import config
 
-from snowy import retrieve_news, news_ret_val
-from snowy import retrieve_movies, movie_ret_val
+from snowy import retrieve_news, send_news
+from snowy import retrieve_movies, send_movies
 
 class SnowyTest(unittest.TestCase):
 
@@ -11,14 +11,14 @@ class SnowyTest(unittest.TestCase):
 				config.news['KEY']).status_code, 200)
 
 	def test_news_return(self):
-		self.assertIsNotNone(news_ret_val)
+		self.assertIsNotNone(send_news)
 
 	def test_retrieve_movies(self):
 		self.assertEqual(retrieve_movies(
 			config.movies['SOURCE']).status_code, 200)
 
 	def test_movies_return(self):
-		self.assertIsNotNone(movie_ret_val)
+		self.assertIsNotNone(send_movies)
 
 if __name__ == '__main__':
 	unittest.main()
