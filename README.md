@@ -10,4 +10,7 @@ https://core.telegram.org/bots/
 
 # Usage
 
+Register a new bot with Telegram. More information: 
+https://core.telegram.org/bots/faq#how-do-i-create-a-bot
+
 Define parameters and custom external API in config.py file.
