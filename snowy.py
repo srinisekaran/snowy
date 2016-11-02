@@ -1,6 +1,8 @@
-# Snowy
-# Helpful Telegram bot
-# Srinivaas Sekaran
+"""
+ Snowy
+ Helpful Telegram bot
+ Srinivaas Sekaran
+"""
 
 import telebot
 import config 
@@ -10,6 +12,7 @@ import json
 from timer import time_track
 from bs4 import BeautifulSoup
 
+# Generator outputs function execution time
 
 @time_track
 def welcome_message(): 
@@ -75,19 +78,19 @@ bot = telebot.TeleBot(config.TOKEN)
 
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
-    bot.reply_to(message, welcome_message())
+	bot.reply_to(message, welcome_message())
 
 @bot.message_handler(commands=['news'])
 def send_news(message):
 	news_ret_val = retrieve_news(config.news['SOURCE'], config.news['KEY'])
-	bot.reply_to(message, parse_news(news_ret_val))
+    	bot.reply_to(message, parse_news(news_ret_val))
 
 @bot.message_handler(commands=['movies'])
 def send_movies(message):
-    movie_ret_val = retrieve_movies(config.movies['SOURCE'])
-    bot.reply_to(message, parse_movies(
-    	movie_ret_val, config.movies['SELECTOR'], 
-    	config.movies['CLASS'], 
-    	config.movies['SUB_SELECTOR'] ))
+    	movie_ret_val = retrieve_movies(config.movies['SOURCE'])
+    	bot.reply_to(message, parse_movies(
+    		movie_ret_val, config.movies['SELECTOR'], 
+    		config.movies['CLASS'], 
+    		config.movies['SUB_SELECTOR'] ))
 
 bot.polling()
