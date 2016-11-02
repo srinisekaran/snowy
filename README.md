@@ -8,7 +8,7 @@ Python and BeautifulSoup used. Running on an EC2 instance.
 More on Telegram Bots:
 https://core.telegram.org/bots/
 
-# Usage
+### Usage
 
 For new bots, register with Telegram. More information: 
 https://core.telegram.org/bots/faq#how-do-i-create-a-bot
